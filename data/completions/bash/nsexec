@@ -1,0 +1,35 @@
+#!/bin/bash
+
+_nsexec() {
+	_init_completion || return
+
+	local boolean_options="
+		--exec
+		--help
+		--unshare-all
+		--unshare-ipc
+		--unshare-net
+		--unshare-pid
+		--unshare-uts
+		--verbose
+		--hostname
+		--graphics
+		--seccomp-keep
+		--uid
+		--gid
+		--lsm-context
+		--rootfs
+		--bind
+		--bind-ro
+		--symlink
+		--chdir
+	"
+
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=($(compgen -W "$boolean_options" -- "$cur"))
+	fi
+
+	return 0
+}
+
+complete -F _nsexec nsexec
