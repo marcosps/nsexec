@@ -47,8 +47,8 @@ static int child_func(void)
 		setup_mountns(&ns_args);
 
 	/* only configure network is a new netns is created */
-	if (ns_args.child_args & CLONE_NEWNET)
-		setup_container_network(ns_args.veth_ns);
+	// if (ns_args.child_args & CLONE_NEWNET)
+	// 	setup_container_network(ns_args.veth_ns);
 
 	if (ns_args.child_args & CLONE_NEWUTS && ns_args.hostname) {
 		verbose("hostname: %s\n", ns_args.hostname);
@@ -288,8 +288,8 @@ int main(int argc, char **argv)
 
 	set_newuid_maps(pid);
 
-	if (ns_args.child_args & CLONE_NEWNET)
-		create_bridge(pid, ns_args.veth_h, ns_args.veth_ns);
+	// if (ns_args.child_args & CLONE_NEWNET)
+	// 	create_bridge(pid, ns_args.veth_h, ns_args.veth_ns);
 
 	verbose("Child pid: %d\n", pid);
 
