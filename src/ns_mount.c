@@ -245,7 +245,7 @@ void set_newuid_maps(pid_t pid)
 	if (system(cmd) == -1)
 		err(EXIT_FAILURE, "newuidmap");
 
-	sprintf(cmd, "newgidmap %d 0 %d 65536", pid, getuid());
+	sprintf(cmd, "newgidmap %d 0 %d 65536", pid, getgid());
 	if (system(cmd) == -1)
 		err(EXIT_FAILURE, "newgidmap");
 }
@@ -335,7 +335,7 @@ void setup_mountns(struct NS_ARGS *ns_args)
 		mkdir_p(mp->dirn, 0755);
 		if (mp->mntd)
 			mount_help(mp->mntd, mp->dirn, NULL,
-					MS_BIND | MS_RDONLY, NULL);
+					MS_BIND | MS_RDONLY | MS_REC, NULL);
 	}
 
 	execute_additional_mounts(ns_args, "/oldroot", "/newroot");
