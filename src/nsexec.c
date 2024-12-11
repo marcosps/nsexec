@@ -122,6 +122,8 @@ static void handle_arguments(int argc, char **argv)
 
 	memset(&ns_args, 0, sizeof(ns_args));
 	ns_args.child_args = SIGCHLD | CLONE_NEWNS | CLONE_NEWUSER;
+	ns_args.ns_user = 0;
+	ns_args.ns_group = 0;
 
 	static struct option long_opt[] = {
 		{"chdir", required_argument, 0, 'c'},
@@ -286,7 +288,7 @@ int main(int argc, char **argv)
 	else if (pid == 0)
 		child_func();
 
-	set_newuid_maps(pid);
+	set_newuid_maps(pid, &ns_args);
 
 	// if (ns_args.child_args & CLONE_NEWNET)
 	// 	create_bridge(pid, ns_args.veth_h, ns_args.veth_ns);

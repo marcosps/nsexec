@@ -237,15 +237,15 @@ void set_maps(pid_t pid, const char *map, struct NS_ARGS *ns_args)
 }
 
 /* map user 1000 to user 0 (root) inside namespace */
-void set_newuid_maps(pid_t pid)
+void set_newuid_maps(pid_t pid, struct NS_ARGS *ns_args)
 {
 	char cmd[1024];
 
-	sprintf(cmd, "newuidmap %d 0 %d 65536", pid, getuid());
+	sprintf(cmd, "newuidmap %d %d %d 65536", pid, ns_args->ns_user, getuid());
 	if (system(cmd) == -1)
 		err(EXIT_FAILURE, "newuidmap");
 
-	sprintf(cmd, "newgidmap %d 0 %d 65536", pid, getgid());
+	sprintf(cmd, "newgidmap %d %d %d 65536", pid, ns_args->ns_group, getgid());
 	if (system(cmd) == -1)
 		err(EXIT_FAILURE, "newgidmap");
 }
