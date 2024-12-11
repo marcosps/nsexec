@@ -74,7 +74,9 @@ test('set hostname', nsexec, args: ['--unshare-uts', '--hostname', 'dummy',
 test('root UID', nsexec, args: ['--unshare-all', '--',
 			'sh', '-c', '[ "$UID" = "0" ]'])
 test('ordinary UID', nsexec, args: ['--unshare-all', '--uid', '1000', '--',
-			'sh', '-c', '[ "$UID" = "1000" ]'])
+			'sh', '-c', '[ "$(id -u)" = "1000" ]'])
+test('ordinary GID', nsexec, args: ['--unshare-all', '--gid', '100', '--',
+			'sh', '-c', '[ "$(id -g)" = "100" ]'])
 test('root GID', nsexec, args: ['--unshare-all', '--',
 			'sh', '-c', '[ "$(id -g)" = "0" ]'])
 test('ordinary GID', nsexec, args: ['--unshare-all', '--gid', '1000', '--',
