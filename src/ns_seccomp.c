@@ -39,6 +39,7 @@ bool default_whitelist(void)
 		SCMP_SYS(chown),
 		SCMP_SYS(clock_getres),
 		SCMP_SYS(clock_gettime),
+		SCMP_SYS(clock_nanosleep),
 		SCMP_SYS(clone),
 		SCMP_SYS(close),
 		SCMP_SYS(connect),
@@ -207,7 +208,9 @@ bool default_whitelist(void)
 		SCMP_SYS(splice),
 		SCMP_SYS(stat),
 		SCMP_SYS(statfs),
+		SCMP_SYS(statx),
 		SCMP_SYS(syscall),
+		SCMP_SYS(syslog),
 		SCMP_SYS(sysinfo),
 		SCMP_SYS(symlink), /* firefox */
 		SCMP_SYS(symlinkat),
