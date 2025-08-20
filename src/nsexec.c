@@ -47,8 +47,8 @@ static int child_func(void)
 		setup_mountns(&ns_args);
 
 	/* only configure network is a new netns is created */
-	// if (ns_args.child_args & CLONE_NEWNET)
-	// 	setup_container_network(ns_args.veth_ns);
+	if (ns_args.child_args & CLONE_NEWNET)
+		setup_container_network(ns_args.veth_ns);
 
 	if (ns_args.child_args & CLONE_NEWUTS && ns_args.hostname) {
 		verbose("hostname: %s\n", ns_args.hostname);
@@ -93,23 +93,22 @@ static void usage(const char *argv0)
 	fprintf(stderr, "Usage: %s [OPTIONS] [ARGUMENTS]\n\n", argv0);
 	fprintf(stderr,
 		"OPTIONS:\n"
-		"--chdir                Change directory inside the container\n"
-		"--bind                 Execute a bind mount\n"
-		"--bind-ro              Execute a bind mount read-only\n"
-		"--exec-file            Execute the specified file inside the sandbox\n"
-		"--graphics             Bind xorg/wayland files into the container\n"
-		"--help                 Print this message\n"
-		"--uid                  Specify an UID to be executed inside the container\n"
-		"--gid                  Specify an GID to be executed inside the container\n"
-		"--same-pod-of          Specify a pid to share the same namespaces (can't be used with unshare flags\n"
-		"--seccomp-keep         Enable seccomp by adding only the specified syscalls to whitelist\n"
-		"--lsm-context          Specify a cotext to be used in SELinux\n"
-		"--unshare-all          Create all supported namespaces\n"
-		"--unshare-ipc          Create new IPC namespace\n"
-		"--unshare-net          Create new network namespace\n"
-		"--unshare-pid          Create new PID namespace\n"
-		"--unshare-uts          Create new uts namespace\n"
-		"--unshare-user         Create new user namespace\n"
+		"--chdir, -c                Change directory inside the container\n"
+		"--bind, -b                 Execute a bind mount\n"
+		"--bind-ro, -B              Execute a bind mount read-only\n"
+		"--exec-file, -e            Execute the specified file inside the sandbox\n"
+		"--graphics, -g             Bind xorg/wayland files into the container\n"
+		"--help, -h                 Print this message\n"
+		"--uid, -x                  Specify an UID to be executed inside the container\n"
+		"--gid, -X                  Specify an GID to be executed inside the container\n"
+		"--same-pod-of, -P          Specify a pid to share the same namespaces (can't be used with unshare flags\n"
+		"--seccomp-keep, -k         Enable seccomp by adding only the specified syscalls to whitelist\n"
+		"--lsm-context, -l          Specify a cotext to be used in SELinux\n"
+		"--unshare-all, -a          Create all supported namespaces\n"
+		"--unshare-ipc, -i          Create new IPC namespace\n"
+		"--unshare-net, -n          Create new network namespace\n"
+		"--unshare-pid, -p          Create new PID namespace\n"
+		"--unshare-uts, -u          Create new uts namespace\n"
 		"--verbose              Enable verbose mode\n\n"
 		"ARGUMENTS:\n"
 		"--hostname             To start with desired hostname (only valid with --unshare-uts option)\n"
@@ -290,8 +289,8 @@ int main(int argc, char **argv)
 
 	set_newuid_maps(pid, &ns_args);
 
-	// if (ns_args.child_args & CLONE_NEWNET)
-	// 	create_bridge(pid, ns_args.veth_h, ns_args.veth_ns);
+	if (ns_args.child_args & CLONE_NEWNET)
+		create_bridge(pid, ns_args.veth_h, ns_args.veth_ns);
 
 	verbose("Child pid: %d\n", pid);
 
