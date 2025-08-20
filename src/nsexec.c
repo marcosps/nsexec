@@ -67,8 +67,10 @@ static int child_func(void)
 		errx(EXIT_FAILURE, "Could not set the LSM context");
 
 	/* setup filter here, as a normal user, since we have NO_NEW_PRIVS */
-	if (!install_seccomp_filter(ns_args.seccomp_filter))
-		errx(EXIT_FAILURE, "Could not install seccomp filter");
+	if (!ns_args.disable_seccomp) {
+		if (!install_seccomp_filter(ns_args.seccomp_filter))
+			errx(EXIT_FAILURE, "Could not install seccomp filter");
+	}
 
 	argv0 = (ns_args.exec_file) ? ns_args.exec_file
 				: ns_args.global_argv[0];
@@ -103,6 +105,7 @@ static void usage(const char *argv0)
 		"--gid, -X                  Specify an GID to be executed inside the container\n"
 		"--same-pod-of, -P          Specify a pid to share the same namespaces (can't be used with unshare flags\n"
 		"--seccomp-keep, -k         Enable seccomp by adding only the specified syscalls to whitelist\n"
+		"--disable-seccomp, -d      Disable setting a seccomp context\n"
 		"--lsm-context, -l          Specify a cotext to be used in SELinux\n"
 		"--unshare-all, -a          Create all supported namespaces\n"
 		"--unshare-ipc, -i          Create new IPC namespace\n"
@@ -144,6 +147,7 @@ static void handle_arguments(int argc, char **argv)
 		{"unshare-pid", no_argument, 0, 'p'},
 		{"unshare-uts", no_argument, 0, 'u'},
 		{"uid", required_argument, 0, 'x'},
+		{"disable-seccomp", no_argument, 0, 'd'},
 		{"verbose", no_argument, 0, 'v'},
 		{0, 0, 0, 0},
 	};
@@ -231,6 +235,9 @@ static void handle_arguments(int argc, char **argv)
 			break;
 		case 'c':
 			ns_args.chdir = optarg;
+			break;
+		case 'd':
+			ns_args.disable_seccomp = true;
 			break;
 		case 'h':
 			usage(argv[0]);

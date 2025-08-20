@@ -15,6 +15,7 @@ struct MOUNT_LIST {
 
 struct NS_ARGS {
 	bool graphics_enabled;
+	bool disable_seccomp;
 	int ns_user;
 	int ns_group;
 	int child_args;
