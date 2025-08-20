@@ -151,7 +151,8 @@ void setup_container_network(char *veth_ns)
 static void setup_bridge(int child_pid, int op, char *veth_h, char *veth_ns)
 {
 	pid_t pid;
-	char *binpath = "/usr/bin/nsexec_nic";
+	// char *binpath = "/usr/bin/nsexec_nic";
+	char *binpath = "./nsexec_nic";
 	char strpid[15];
 	int wstatus;
 
@@ -169,7 +170,7 @@ static void setup_bridge(int child_pid, int op, char *veth_h, char *veth_ns)
 		else if (op == DELETE_BRIDGE)
 			execlp(binpath, binpath, "delete", veth_h, NULL);
 
-		errx(EXIT_FAILURE, "execlp bridge failed");
+		errx(EXIT_FAILURE, "execlp bridge failed %d", op);
 		/* fall-thru */
 	default:
 		if (waitpid(pid, &wstatus, 0) == -1)
