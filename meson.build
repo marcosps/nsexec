@@ -2,12 +2,15 @@ project('nsexec', 'c'
 	, default_options: [
 		'prefix=/usr',
 		'sysconfdir=/etc',
+		'warning_level=3',
+		'optimization=2'
 	])
 
 pkgconfig = find_program('pkg-config')
 runcmd = run_command(pkgconfig
 	, '--variable=completionsdir'
-	, 'bash-completion')
+	, 'bash-completion'
+	, check: true)
 
 # assume bash-complete is installed and working
 install_data(sources: 'data/completions/bash/nsexec'
@@ -17,7 +20,6 @@ meson.add_install_script('data/post-install.sh')
 
 cc = meson.get_compiler('c')
 c_args = [
-	'-Wextra',
 	'-Wshadow',
 	'-Wformat=2',
 	'-fstack-protector-strong',
@@ -26,7 +28,6 @@ c_args = [
 	'-Wduplicated-branches',
 	'-Wlogical-op',
 	'-Wjump-misses-init',
-	'-O2'
 ]
 
 foreach arg : c_args
